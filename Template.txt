@@ -1,0 +1,5 @@
+Font:
+Size:
+Highlighted Background Colo(u)r:
+Highlighted Text Colo(u)r:
+##Copy the above text into the editor, Make your theme and save as an '.IXXTC' file or 'IXX Theme Config' File. DO NOT INCLUDE THIS PART!!!##

@@ -1,0 +1,5 @@
+Use Word Wrap?(No Horrizontal Scroll Bar):True
+Theme Config:Theme.IXXC
+Custom Theme Index File:Theme_Index.IXXS
+Window Height:660
+Window Width:1200
