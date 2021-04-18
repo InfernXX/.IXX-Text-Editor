@@ -5,10 +5,22 @@ import os
 from pathlib import Path
 Rt = Tk()
 #Grab all the different Config Settings
-C_Con = open("Config.txt", "r").read().split("\n")
+try:
+    C_Con = open("Config.txt", "r").read().split("\n")
+except FileNotFoundError:
+    Check = Path(os.path.join(os.getcwd(),"Assets")).is_dir()
+    if Check:
+        pass
+    else:
+        os.mkdir(os.path.join(os.getcwd(),"Assets"))
+    from FileGen import Generate as Gen
+    Gen()
 try:
     Theme_Con_Mast = open(C_Con[1].split(":")[1], "r").read().split(":")
-    Theme_Con = open(Theme_Con_Mast[1], "r").read().split("\n")
+    if Theme_Con_Mast[1] == "":
+        Theme_Con = open("Basic.IXXTC", "r").read().split("\n")
+    else:
+        Theme_Con = open(Theme_Con_Mast[1], "r").read().split("\n")
     Theme_Dict = {"Font":Theme_Con[0].split(":")[1], "F.Size":int(Theme_Con[1].split(":")[1]), "H.B.Colour":Theme_Con[2].split(":")[1].lower(), "H.T.Colour":Theme_Con[3].split(":")[1].lower()}
 except FileNotFoundError:
     ThFile = open(C_Con[1].split(":")[1], "w")
@@ -18,6 +30,40 @@ except FileNotFoundError:
     Theme_Con_Mast = open(C_Con[1].split(":")[1], "r").read().split(":")
     Theme_Con = open(Theme_Con_Mast[1], "r").read().split("\n")
     Theme_Dict = {"Font":Theme_Con[0].split(":")[1], "F.Size":int(Theme_Con[1].split(":")[1]), "H.B.Colour":Theme_Con[2].split(":")[1].lower(), "H.T.Colour":Theme_Con[3].split(":")[1].lower()}
+except IndexError:
+    Check = Path(os.path.join(os.getcwd(),"Assets")).is_dir()
+    if Check:
+        pass
+    else:
+        os.mkdir(os.path.join(os.getcwd(),"Assets"))
+    from FileGen import Generate as Gen
+    Gen()
+    C_Con = open("Config.txt", "r").read().split("\n")
+    ThFile = open(C_Con[1].split(":")[1], "w")
+    NewTheme = "Active Theme:Basic.IXXTC"
+    ThFile.write(NewTheme)
+    ThFile.close()
+    Theme_Con_Mast = open(C_Con[1].split(":")[1], "r").read().split(":")
+    Theme_Con = open(Theme_Con_Mast[1], "r").read().split("\n")
+    Theme_Dict = {"Font":Theme_Con[0].split(":")[1], "F.Size":int(Theme_Con[1].split(":")[1]), "H.B.Colour":Theme_Con[2].split(":")[1].lower(), "H.T.Colour":Theme_Con[3].split(":")[1].lower()}
+except NameError:
+    C_Con = open("Config.txt", "r").read().split("\n")
+    try:
+        Theme_Con_Mast = open(C_Con[1].split(":")[1], "r").read().split(":")
+        if Theme_Con_Mast[1] == "":
+            Theme_Con = open("Basic.IXXTC", "r").read().split("\n")
+        else:
+            Theme_Con = open(Theme_Con_Mast[1], "r").read().split("\n")
+        Theme_Dict = {"Font":Theme_Con[0].split(":")[1], "F.Size":int(Theme_Con[1].split(":")[1]), "H.B.Colour":Theme_Con[2].split(":")[1].lower(), "H.T.Colour":Theme_Con[3].split(":")[1].lower()}
+    except FileNotFoundError:
+        ThFile = open(C_Con[1].split(":")[1], "w")
+        NewTheme = "Active Theme:Basic.IXXTC"
+        ThFile.write(NewTheme)
+        ThFile.close()
+        Theme_Con_Mast = open(C_Con[1].split(":")[1], "r").read().split(":")
+        Theme_Con = open(Theme_Con_Mast[1], "r").read().split("\n")
+        Theme_Dict = {"Font":Theme_Con[0].split(":")[1], "F.Size":int(Theme_Con[1].split(":")[1]), "H.B.Colour":Theme_Con[2].split(":")[1].lower(), "H.T.Colour":Theme_Con[3].split(":")[1].lower()}
+
 #Grab the Config for Text Wrapping.
 TWrap = C_Con[0].split(":")
 #Syncronising True and False Statements for the list.
@@ -41,7 +87,7 @@ else:
     os.mkdir(os.path.join(os.getcwd(),"Custom Themes"))
 
 
-Rt.title("Untitled - DEV Text Editor")
+Rt.title("Untitled - IXX Text Editor")
 Rt.iconbitmap("Assets/Text Editor Icon.ico")
 
 #Padding Correction depedning on TWarp Config Setting.
@@ -66,7 +112,7 @@ def NewFile(e):
     #Delete Previous Contents
     MText.delete("1.0", END)
     #Update Status Bars
-    Rt.title("New File - DEV Text Editor")
+    Rt.title("New File - IXX Text Editor")
     SBar.config(text="New File        ")
     
     global OpenG_Name #OpenGlobal_Name
@@ -93,7 +139,7 @@ def OpenFile(e):
     Name = TFile
     SBar.config(text=f"{Name}        ")
     Name = os.path.basename(Name)
-    Rt.title(f"{Name} - DEV Text Editor")
+    Rt.title(f"{Name} - IXX Text Editor")
     #Circumventing Exceptions caused by the cancelation of OpenFile
     if OpenedFile != False:
         #Open the File
@@ -112,7 +158,7 @@ def SaveFileAs(e):
         Name = TFile
         SBar.config(text=f"Saved: {Name}        ")
         Name = os.path.basename(Name)
-        Rt.title(f"{Name} - DEV Text Editor")
+        Rt.title(f"{Name} - IXX Text Editor")
 
         #Save the File
         TFile = open(TFile, "w")
@@ -281,6 +327,7 @@ try:
 except FileNotFoundError:
     F = open(C_Con[2].split(":")[1], "w")
     F.close()
+    Custom_Themes = []
 
 #Add Theme Menu
 TMenu = Menu(MMenu, tearoff=False)
