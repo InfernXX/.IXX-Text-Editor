@@ -13,23 +13,34 @@ except FileNotFoundError:
         pass
     else:
         os.mkdir(os.path.join(os.getcwd(),"Assets"))
-    from FileGen import Generate as Gen
-    Gen()
+    #from FileGen import Generate as Gen
+    #Gen()
 try:
-    Theme_Con_Mast = open(C_Con[1].split(":")[1], "r").read().split(":")
+    Theme_Con_Mast = open(C_Con[1].split(":")[1], "r").read().split("::")
     if Theme_Con_Mast[1] == "":
         Theme_Con = open("Basic.IXXTC", "r").read().split("\n")
     else:
         Theme_Con = open(Theme_Con_Mast[1], "r").read().split("\n")
     Theme_Dict = {"Font":Theme_Con[0].split(":")[1], "F.Size":int(Theme_Con[1].split(":")[1]), "H.B.Colour":Theme_Con[2].split(":")[1].lower(), "H.T.Colour":Theme_Con[3].split(":")[1].lower()}
 except FileNotFoundError:
-    ThFile = open(C_Con[1].split(":")[1], "w")
-    NewTheme = "Active Theme:Basic.IXXTC"
-    ThFile.write(NewTheme)
-    ThFile.close()
-    Theme_Con_Mast = open(C_Con[1].split(":")[1], "r").read().split(":")
-    Theme_Con = open(Theme_Con_Mast[1], "r").read().split("\n")
-    Theme_Dict = {"Font":Theme_Con[0].split(":")[1], "F.Size":int(Theme_Con[1].split(":")[1]), "H.B.Colour":Theme_Con[2].split(":")[1].lower(), "H.T.Colour":Theme_Con[3].split(":")[1].lower()}
+    Check = open(C_Con[2].split(":")[1], "r").read().split("\n")
+    Theme_Con_Mast = Temp = open(C_Con[1].split(":")[1], "r").read().split("::")
+    if Theme_Con_Mast[1] in Check:
+        ThFile = open(C_Con[1].split(":")[1], "w")
+        NewTheme = "Active Theme::"+os.path.join(os.path.join(os.getcwd(),"Custom Themes"), Temp[1])
+        ThFile.write(NewTheme)
+        ThFile.close()
+        Theme_Con_Mast = open(C_Con[1].split(":")[1], "r").read().split("::")
+        Theme_Con = open(Theme_Con_Mast[1], "r").read().split("\n")
+        Theme_Dict = {"Font":Theme_Con[0].split(":")[1], "F.Size":int(Theme_Con[1].split(":")[1]), "H.B.Colour":Theme_Con[2].split(":")[1].lower(), "H.T.Colour":Theme_Con[3].split(":")[1].lower()}
+    else:
+        ThFile = open(C_Con[1].split(":")[1], "w")
+        NewTheme = "Active Theme::Basic.IXXTC"
+        ThFile.write(NewTheme)
+        ThFile.close()
+        Theme_Con_Mast = open(C_Con[1].split(":")[1], "r").read().split("::")
+        Theme_Con = open(Theme_Con_Mast[1], "r").read().split("\n")
+        Theme_Dict = {"Font":Theme_Con[0].split(":")[1], "F.Size":int(Theme_Con[1].split(":")[1]), "H.B.Colour":Theme_Con[2].split(":")[1].lower(), "H.T.Colour":Theme_Con[3].split(":")[1].lower()}
 except IndexError:
     Check = Path(os.path.join(os.getcwd(),"Assets")).is_dir()
     if Check:
@@ -49,7 +60,7 @@ except IndexError:
 except NameError:
     C_Con = open("Config.txt", "r").read().split("\n")
     try:
-        Theme_Con_Mast = open(C_Con[1].split(":")[1], "r").read().split(":")
+        Theme_Con_Mast = open(C_Con[1].split(":")[1], "r").read().split("::")
         if Theme_Con_Mast[1] == "":
             Theme_Con = open("Basic.IXXTC", "r").read().split("\n")
         else:
@@ -57,7 +68,7 @@ except NameError:
         Theme_Dict = {"Font":Theme_Con[0].split(":")[1], "F.Size":int(Theme_Con[1].split(":")[1]), "H.B.Colour":Theme_Con[2].split(":")[1].lower(), "H.T.Colour":Theme_Con[3].split(":")[1].lower()}
     except FileNotFoundError:
         ThFile = open(C_Con[1].split(":")[1], "w")
-        NewTheme = "Active Theme:Basic.IXXTC"
+        NewTheme = "Active Theme::Basic.IXXTC"
         ThFile.write(NewTheme)
         ThFile.close()
         Theme_Con_Mast = open(C_Con[1].split(":")[1], "r").read().split(":")
@@ -245,7 +256,7 @@ def PasteText(e):
 def Theme_Change(Theme):
     #Open Theme File and append the new theme to it.
     ThFile = open(C_Con[1].split(":")[1], "w")
-    NewTheme = "Active Theme:"+Theme
+    NewTheme = "Active Theme::"+Theme
     ThFile.write(NewTheme)
     ThFile.close()
 
@@ -260,7 +271,7 @@ def AddTheme(e):
         Theme.close()
         IndexAppend = open(C_Con[2].split(":")[1], "a")
         IndexAppend.write("\n")
-        IndexAppend.write(os.path.basename(CThFile))
+        IndexAppend.write(os.path.join(os.path.join(os.getcwd(),"Custom Themes"), os.path.basename(CThFile)))
         IndexAppend.close()
     else:
         pass
@@ -336,9 +347,12 @@ TMenu.add_command(label="Basic", command=lambda: Theme_Change("Basic.IXXTC"))
 TMenu.add_command(label="C-Blue White", command=lambda: Theme_Change("C-Blue White.IXXTC"))
 TMenu.add_command(label="T-Purple White", command=lambda: Theme_Change("T-Purple White.IXXTC"))
 TMenu.add_separator()
-for i in range(len(Custom_Themes)):
-    Theme = os.path.join(os.path.join(os.getcwd(),"Custom Themes"), Custom_Themes[i]).replace(os.path.join(os.getcwd(),"Custom Themes"), "")
-    TMenu.add_command(label=Theme.replace(".IXXTC", "").replace("\\", ""), command=lambda: Theme_Change(Custom_Themes[i]))
+for Themes in Custom_Themes:
+    if Themes == "":
+        pass
+    else:
+        Theme = os.path.basename(os.path.join(os.path.join(os.getcwd(),"Custom Themes"), Themes))
+        TMenu.add_command(label=Theme.replace(".IXXTC", "").replace("\\", ""), command=lambda: Theme_Change((os.path.join(os.path.join(os.getcwd(),"Custom Themes"), Themes))))
 TMenu.add_separator()
 TMenu.add_command(label="Add New Theme          ", command=lambda: AddTheme(False), accelerator="(Ctrl+t)")
 TMenu.add_command(label="Open Template.txt", command=lambda: OpenTemplate(False))
