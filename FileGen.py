@@ -6,7 +6,9 @@ class FileN_to_FileC:
         self.File_Contents = self.File_Contents.split(Break_Catalyst)
 def Generate():
     #Opening Sample File to gather the fist initial files that aren't Images
-    Fnb = open("Sample.IXXCF", "rb").read().split(b"\r\n|I*X*X|\r\n") #Fnb - File-non binary
+    F = open("Sample.IXXCF", "rb") #Fnb - File-non binary
+    Fnb = F.read().split(b"\r\n|I*X*X|\r\n")
+    F.close()
     Fnb.remove(Fnb[0])
     Fnb.remove(Fnb[len(Fnb)-1])
     MGL = [] #Master Generator List
@@ -27,13 +29,11 @@ def Generate():
             else:
                 Write_Var += str(Line)+"\n"
         Write_Var = Write_Var.replace("|U", "U").replace("|F", "F").replace("||", "")
-        print(Write_Var)
         Write_Var = Write_Var.replace("|", "\n")
         Fin = Write_Var.split("\n")
         Fin.pop(len(Fin)-1)
         Write_Var = ""
         Count = 0
-        print("Len:", len(Fin))
         for I in Fin:
             if Count == len(Fin)-1:
                 Write_Var += I
@@ -42,7 +42,9 @@ def Generate():
             Count += 1
         Written.write(str(Write_Var).replace("b'", "").replace("'", ""))
     #Open and use the Binary version for the Icon
-    Fb = open("Sample.IXXCF", "rb").read().split(b"\r\n|I*X*X|\r\n")
+    F = open("Sample.IXXCF", "rb")
+    Fb = F.read().split(b"\r\n|I*X*X|\r\n")
+    F.close()
     Fin_Bin = Fb.pop(len(Fb)-1)
     Fb.clear()
     Fin_Bin = Fin_Bin.split(b"/:>\r\n")
