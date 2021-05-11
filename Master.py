@@ -9,7 +9,7 @@ App_Run = True
 #Application Loop
 while App_Run:
     try:
-        ExtC = Anima("", True)
+        ExtC = Anima("", False)
         if ExtC == "Theme_Change_Exit":
             pass
         elif ExtC == "Normal_Exit":
